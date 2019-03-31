@@ -12,9 +12,9 @@ import com.sun.jersey.core.impl.provider.entity.XMLJAXBElementProvider.Text;
 public class FlowcountRunner {
 	
 	public static void main(String[] args) throws Exception {
-		String outPath = "hdfs://106.12.39.217:9000/flow/output" + args[0];
+		String outPath = "hdfs://suzhou:9000/flow/output" + args[0];
 		Configuration conf = new Configuration();
-		conf.set("fs.defaultFS", "hdfs://106.12.39.217:9000");
+		conf.set("fs.defaultFS", "hdfs://suzhou:9000");
 		Job job = Job.getInstance(conf);
 		job.setMapperClass(FlowMapper.class);
 		job.setMapOutputKeyClass(Text.class);
@@ -23,7 +23,7 @@ public class FlowcountRunner {
 		job.setReducerClass(FlowReduce.class);
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(FlowBean.class);
-		FileInputFormat.setInputPaths(job, "hdfs://106.12.39.217:9000/flow/input/flow.log");
+		FileInputFormat.setInputPaths(job, "hdfs://suzhou:9000/flow/input/flow.log");
 		FileSystem fileSystem = FileSystem.get(conf);
 		if(fileSystem.exists(new Path(outPath))) {
 			fileSystem.delete(new Path(outPath),true);
