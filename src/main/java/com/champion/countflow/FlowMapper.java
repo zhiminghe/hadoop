@@ -9,7 +9,7 @@ import org.apache.hadoop.mapreduce.Mapper;
 public class FlowMapper extends Mapper<LongWritable, Text, Text, FlowBean>{
 	
 	private FlowBean flowBean = new FlowBean(); 
-	
+
 	@Override
 	protected void map(LongWritable key, Text value, Context context)
 			throws IOException, InterruptedException {
@@ -19,9 +19,8 @@ public class FlowMapper extends Mapper<LongWritable, Text, Text, FlowBean>{
 			return;
 		}
 		String[] alltrimes = flows.split("\t");
-		flowBean.setUploadFlow(Long.getLong(alltrimes[flows.length() - 3]));
-		flowBean.setDownloadFlow(Long.getLong(alltrimes[flows.length() - 2]));
+		flowBean.setUploadFlow(Long.valueOf(alltrimes[alltrimes.length - 3]));
+		flowBean.setDownloadFlow(Long.valueOf(alltrimes[alltrimes.length - 2]));
 		context.write(new Text(alltrimes[1]), flowBean);
 	}
-	
 }

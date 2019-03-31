@@ -3,11 +3,11 @@ package com.champion.countflow;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-import com.sun.jersey.core.impl.provider.entity.XMLJAXBElementProvider.Text;
 
 public class FlowcountRunner {
 	
@@ -16,6 +16,8 @@ public class FlowcountRunner {
 		Configuration conf = new Configuration();
 		conf.set("fs.defaultFS", "hdfs://suzhou:9000");
 		Job job = Job.getInstance(conf);
+		
+		job.setJarByClass(FlowcountRunner.class);
 		job.setMapperClass(FlowMapper.class);
 		job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(FlowBean.class);
@@ -29,7 +31,8 @@ public class FlowcountRunner {
 			fileSystem.delete(new Path(outPath),true);
 		}
 		FileOutputFormat.setOutputPath(job, new Path(outPath));
-		job.submit();
+		boolean rs = job.waitForCompletion(true);
+		System.exit(rs ? 0 : 1);
 		
 	}
 	
