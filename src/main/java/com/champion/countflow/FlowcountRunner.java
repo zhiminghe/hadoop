@@ -15,6 +15,8 @@ public class FlowcountRunner {
 		String outPath = "hdfs://suzhou:9000/flow/output" + args[0];
 		Configuration conf = new Configuration();
 		conf.set("fs.defaultFS", "hdfs://suzhou:9000");
+		conf.set("mapreduce.framwork.name","yarn");
+		conf.set("yarn.resoucemanager.hostname","suzhou");
 		Job job = Job.getInstance(conf);
 		
 		job.setJarByClass(FlowcountRunner.class);
@@ -31,8 +33,9 @@ public class FlowcountRunner {
 			fileSystem.delete(new Path(outPath),true);
 		}
 		FileOutputFormat.setOutputPath(job, new Path(outPath));
-		boolean rs = job.waitForCompletion(true);
-		System.exit(rs ? 0 : 1);
+//		boolean rs = job.waitForCompletion(true);
+//		System.exit(rs ? 0 : 1);
+		job.submit();
 		
 	}
 	
